@@ -127,10 +127,10 @@ var gdprDelete = function () {
         }
       }
 
-      jQuery.post('/gdpr/cookie_blocking', {
-        'gdpr_c': OptanonActiveGroups,
-        'cookie_toblock': JSON.stringify(cookies_to_block)
+      jQuery.post("/gdpr/cookie_blocking", {
+        "gdpr_c": OptanonActiveGroups,
+        "cookie_toblock": JSON.stringify(cookies_to_block)
       });
     }
-  }
+  };
 };
