@@ -12,7 +12,7 @@ var gdprDelete = function () {
    */
   var getDisabledCategory = function (activegroups, cookie_category) {
 
-    var res = activegroups.split(",");
+    var res = activegroups.split(',');
     var disabled = [];
     cookie_category.forEach(function (c_category) {
       if (Array.isArray(res) === true) {
@@ -56,7 +56,7 @@ var gdprDelete = function () {
     c_list.forEach(function (c_names) {
       deleteCookie(c_names.Name);
       if(jQuery.cookie(c_names.Name) !== null) {
-        deleteCookie(c_names.Name, "partdomain");
+        deleteCookie(c_names.Name, 'partdomain');
       }
     });
   };
@@ -68,8 +68,8 @@ var gdprDelete = function () {
    */
   var deleteCookie = function (c_name, c_host) {
     var params = {};
-    params["expires"] = 'Thu, 01-Jan-70 00:00:01 GMT';
-    if (c_host === "partdomain") {
+    params['expires'] = 'Thu, 01-Jan-70 00:00:01 GMT';
+    if (c_host === 'partdomain') {
       //Will apply only when the dev/stage domains are set in cookie.
       var part_domains = Drupal.settings.js_cookie_blocking.base_domain.split(".");
       var last = part_domains.pop();
@@ -81,10 +81,10 @@ var gdprDelete = function () {
       part_domains.reverse();
       part_domains.forEach(function (part_domain) {
         var path = "/";
-        document.cookie = c_name + "=" +
-          ((path) ? "; path=" + path : "") +
-          ((part_domain) ? "; domain=" + part_domain : "") +
-          "; expires="+params.expires;
+        document.cookie = c_name + '=' +
+          ((path) ? '; path=' + path : '') +
+          ((part_domain) ? '; domain=' + part_domain : '') +
+          '; expires='+params.expires;
         if(jQuery.cookie(c_name) === null) {
           return true;
         }
@@ -127,9 +127,9 @@ var gdprDelete = function () {
         }
       }
 
-      jQuery.post("/gdpr/cookie_blocking", {
-        "gdpr_c": OptanonActiveGroups,
-        "cookie_toblock": JSON.stringify(cookies_to_block)
+      jQuery.post('/gdpr/cookie_blocking', {
+        'gdpr_c': OptanonActiveGroups,
+        'cookie_toblock': JSON.stringify(cookies_to_block)
       });
     }
   }
