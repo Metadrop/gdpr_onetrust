@@ -2,10 +2,13 @@
  * @file
  * The OneTrust API data and categories filter, and cookie deletion.
  */
-var gdprDelete = function ( name ) {
+var gdprDelete = function () {
 
   /**
    * Get the list of disabled category ids
+   *  @param {array} activegroups The activegroup array from OneTrust.
+   *  @param {array} cookie_category The cookie category Ids from website..
+   *  @returns {array} The disabled category ids.
    */
   var getDisabledCategory = function (activegroups, cookie_category) {
 
@@ -23,6 +26,9 @@ var gdprDelete = function ( name ) {
 
   /**
    * Generate a list of cookies to delete
+   * @param {array} cookie_list The full list of cookies.
+   * @param {array} cookie_category_id The disabled category.
+   * @param {array} cookies_to_block The cookies to block.
    */
   var getDisabledCookies = function (cookie_list, cookie_category_id, cookies_to_block) {
     if (cookie_list.length > 0) {
@@ -44,6 +50,7 @@ var gdprDelete = function ( name ) {
 
   /**
    * Delete the cookie from the site domain.
+   * @param {array} c_list The list of cookies.
    */
   var prepareDeleteCookie = function (c_list) {
     c_list.forEach(function (c_names) {
@@ -56,6 +63,8 @@ var gdprDelete = function ( name ) {
 
   /**
    * Delete the cookies.
+   * @param {array} c_name The cookie name.
+   * @param {array} c_host The cookie host.
    */
   var deleteCookie = function (c_name, c_host) {
     var params = {};
