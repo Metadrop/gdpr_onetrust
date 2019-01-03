@@ -1,0 +1,169 @@
+<?php
+
+/**
+ * @file
+ * Module deals with the General Data Protection Regulation using OneTrust.
+ *
+ * Communications that comes into effect in the UK on 25th May 2018.
+ */
+
+/**
+ * Regex and domain declarations.
+ */
+define('GDPR_ONETRUST_UUID_REGEX', '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}(-test){0,1}$/i');
+define('GDPR_ONETRUST_LIVE_DOMAIN', '//cdn.cookielaw.org/consent/');
+define('GDPR_ONETRUST_STAGE_DOMAIN', 'https://optanon.blob.core.windows.net/consent/');
+
+/**
+ * Implements hook_menu().
+ */
+function gdpr_onetrust_menu() {
+  $items['admin/config/system/gdpr-onetrust'] = array(
+    'title' => 'GDPR compliance',
+    'description' => 'Make your website compliant with the GDPR Directive on Privacy and Data protection regulations using One Trust.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('gdpr_onetrust_compliance_admin_form'),
+    'access arguments' => array('administer GDPR One Trust configurations'),
+    'file' => 'gdpr_onetrust.admin.inc',
+    'weight' => -10,
+  );
+
+  $items['admin/config/system/gdpr-onetrust/uuid'] = array(
+    'title' => 'UUID',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -30,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function gdpr_onetrust_permission() {
+  return array(
+    'administer GDPR One Trust configurations' => array(
+      'title' => 'Administer GDPR One Trust configurations',
+    ),
+  );
+}
+
+/**
+ * Implements hook_init().
+ */
+function gdpr_onetrust_init() {
+  global $language;
+  $language_list = language_list();
+  if (count($language_list) == 1 && !is_null(variable_get('gdpr_onetrust_compliance_uuid'))) {
+    $current_language_uuid = variable_get('gdpr_onetrust_compliance_uuid');
+  }
+  else {
+    $current_language_uuid = variable_get('gdpr_onetrust_compliance_uuid_' . $language->language);
+  }
+  $path = $_GET['q'];
+  $abs_url = url($path, array('absolute' => TRUE));
+  if (!empty($current_language_uuid) && (gdpr_onetrust_compliance_isvalid_uuid($current_language_uuid) == TRUE)) {
+    gdpr_onetrust_get_domain($current_language_uuid);
+  }
+}
+
+/**
+ * Sets the api script tag.
+ */
+function gdpr_onetrust_get_domain($current_language_uuid) {
+
+  $ret = preg_match(GDPR_ONETRUST_UUID_REGEX, $current_language_uuid, $matches);
+
+  if (isset($matches[1]) && $matches[1] == '-test') {
+    $domain = GDPR_ONETRUST_STAGE_DOMAIN;
+  }
+  else {
+    $domain = GDPR_ONETRUST_LIVE_DOMAIN;
+  }
+
+  $gdpr_api_url = $domain . $current_language_uuid . '.js';
+
+  $script_tag = array(
+    '#tag' => 'script',
+    '#attributes' => array(
+      'type' => 'text/javascript',
+      'charset' => 'UTF-8',
+      'src' => check_url($gdpr_api_url),
+      'async' => 'async',
+      'data-cfasync' => 'false',
+    ),
+    '#value' => '',
+    '#type' => 'html_tag',
+  );
+
+  drupal_add_html_head($script_tag, 'gdpr_ontrust_tag');
+
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function gdpr_onetrust_block_info() {
+  $blocks = array();
+
+  $blocks['onetrust_cookie_table'] = array(
+    'info' => t('One Trust Cookie table'),
+  );
+
+  $blocks['onetrust_cookie_settings'] = array(
+    'info' => t('One Trust cookie settings'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function gdpr_onetrust_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    // One Trust Cookie table Block.
+    case 'onetrust_cookie_table':
+      $block['subject'] = '<none>';
+      $block['content'] = theme('cookie_table');
+      break;
+
+    // One Trust Footer Block.
+    case 'onetrust_cookie_settings':
+      $block['subject'] = '<none>';
+      $block['content'] = theme('cookie_settings');
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function gdpr_onetrust_theme() {
+  return array(
+    'cookie_table' => array(
+      'path' => drupal_get_path('module', 'gdpr_onetrust') . '/theme',
+      'template' => 'cookie-table',
+    ),
+    'cookie_settings' => array(
+      'path' => drupal_get_path('module', 'gdpr_onetrust') . '/theme',
+      'template' => 'cookie-settings',
+    ),
+  );
+}
+
+/**
+ * Check if UUID is valid .
+ */
+function gdpr_onetrust_compliance_isvalid_uuid($uuid) {
+
+  if (!empty($uuid) && preg_match(GDPR_ONETRUST_UUID_REGEX, $uuid) !== 1) {
+    return FALSE;
+  }
+  else {
+    return TRUE;
+  }
+}
