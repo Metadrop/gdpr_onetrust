@@ -11,10 +11,9 @@
 function cookie_js_path() {
 
   return $cookie_js_path = array(
-    JS_COOKIE_BLOCKING_PERFORMANCE => array(),
-    JS_COOKIE_BLOCKING_FUNCTIONAL => array(),
-    JS_COOKIE_BLOCKING_TARGETTING => array(),
-    JS_COOKIE_BLOCKING_MEDIA => array(),
+    ONETRUST_COOKIE_BLOCKING_PERFORMANCE => array(),
+    ONETRUST_COOKIE_BLOCKING_FUNCTIONAL => array(),
+    ONETRUST_COOKIE_BLOCKING_TARGETTING => array(),
   );
 
 }

@@ -2,38 +2,19 @@
 
 /**
  * @file
- * Installation file.
+ * Contains install and update functions for Block.
  */
 
+use Drupal\menu_link_content\Entity\MenuLinkContent;
+
 /**
- * Implements hook_install().
+ * Hook_install()
  */
 function gdpr_onetrust_install() {
-
-  $item = array(
-    'link_title' => st('Cookie Settings'),
-    'link_path' => '<front>',
-    'menu_name' => 'user-menu',
-    'customized' => 1,
-    'weight' => 1,
-    'options' => array('attributes' => array('class' => array('optanon-show-settings'))),
-  );
-
-  $menuiid = menu_link_save($item);
-  if ($menuiid === FALSE) {
-    drupal_set_message(st('Menu creation failed, please create a menu with title "Cookie Settings" and class="optanon-show-settings and assign to site footer."'), 'warning');
-  }
-  else {
-    drupal_set_message(st('Assign the cookie settings to desired menu preferably footer by going to : /admin/structure/menu/item/%menuiid/edit', array('%menuiid' => $menuiid)), 'status');
-    drupal_set_message(st('Alternatively you can visit /admin/structure/menu/manage/user-menu, assign the menu item "Cookie Settings" to site footer menu.'), 'status');
-  }
-}
-
-/**
- * Implements hook_uninstall().
- */
-function gdpr_onetrust_uninstall() {
-
-  variable_del('gdpr_onetrust_compliance_uuid');
-  cache_clear_all('variables', 'cache');
+  $menu_link = MenuLinkContent::create([
+    'title' => t('Cookie Settings'),
+    'link' => ['uri' => 'internal:/<front>'],
+    'menu_name' => 'account',
+  ]);
+  $menu_link->save();
 }

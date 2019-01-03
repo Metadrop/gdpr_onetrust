@@ -1,7 +1,0 @@
-name = GDPR - OneTrust Integration
-description = General Data Protection Regulation - OneTrust Intergation.
-package = GDPR
-version = 7.x-1.1
-core = 7.x
-project = "gdpr_onetrust"
-configure = admin/config/system/gdpr-onetrust

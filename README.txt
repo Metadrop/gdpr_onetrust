@@ -1,4 +1,4 @@
-General Data Protection Regulation using One Trust 7.x - 1.x
+General Data Protection Regulation using One Trust 8.x - 1.x
 ==============================================================
 
 This module intends to deal with the EU Directive on Data Protection Regulation
@@ -21,22 +21,16 @@ from OneTrust https://onetrust.com/.
 Installation.
 =============
 
-1. Unzip the files to the "sites/all/modules" directory and enable the module.
+1. Unzip the files to the "sites/all/modules" or "modules" directory 
+and enable the module.
 
-2. Give the administer or other roles permission to make changes on the 
-configuration page. You can do so on the admin/user/permissions page.
-
-3. Go to the admin/config/system/gdpr-onetrust page to place the UUID procured
+2. Go to the admin/config/system/gdpr-onetrust page to place the UUID procured
 from OneTrust.
 
-Recommendation:
-Assing the UUID in settings.php
-$conf['gdpr_onetrust_compliance_uuid'] = '<UUID value>';
-
-4. You may want to create a cookie policy page that would explain how your site 
+3. You may want to create a cookie policy page that would explain how your site 
 uses cookies.
 
-5. To display the cookie table on the cookie policy page place this div 
+4. To display the cookie table on the cookie policy page place this div 
 <div id="optanon-cookie-policy"></div> in the desired location in cookie policy 
 page.
 
@@ -45,8 +39,8 @@ Or
 Alternatively you can use the "One Trust Cookie table" block and place it 
 according to your site build.
 
-6. To place the cookie settings button on the website you can place the 
-menu item "Cookie Settings" from admin/structure/menu/manage/user-menu to
+5. To place the cookie settings button on the website you can place the 
+menu item "Cookie Settings" from admin/structure/menu/manage/account to
 footer menu of the website.
 
 or
