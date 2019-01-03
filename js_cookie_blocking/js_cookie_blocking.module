@@ -10,6 +10,46 @@ define('JS_COOKIE_BLOCKING_FUNCTIONAL', '3');
 define('JS_COOKIE_BLOCKING_TARGETTING', '4');
 define('JS_COOKIE_BLOCKING_MEDIA', '8');
 
+
+/**
+ * Implements hook_help().
+ */
+function js_cookie_blocking_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#js_cookie_blocking':
+
+      $filepath = dirname(__FILE__) . '/README.md';
+      if (file_exists($filepath)) {
+        $readme = file_get_contents($filepath);
+      }
+      else {
+        $filepath = dirname(__FILE__) . '/README.txt';
+        if (file_exists($filepath)) {
+          $readme = file_get_contents($filepath);
+        }
+      }
+      if (!isset($readme)) {
+        return NULL;
+      }
+      if (module_exists('markdown')) {
+        $filters = module_invoke('markdown', 'filter_info');
+        $info = $filters['filter_markdown'];
+
+        if (function_exists($info['process callback'])) {
+          $output = $info['process callback']($readme, NULL);
+        }
+        else {
+          $output = '<pre>' . $readme . '</pre>';
+        }
+      }
+      else {
+        $output = '<pre>' . $readme . '</pre>';
+      }
+
+      return $output;
+  }
+}
+
 /**
  * Implements hook_menu().
  */
@@ -18,7 +58,7 @@ function js_cookie_blocking_menu() {
     'title' => 'Configurations',
     'description' => 'Configure the external javascript with their cookie category',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('gdpr_onetrust_cookie_admin_form'),
+    'page arguments' => array('js_cookie_blocking_admin_form'),
     'access arguments' => array('administer GDPR One Trust configurations'),
     'file' => 'js_cookie_blocking.admin.inc',
     'type' => MENU_LOCAL_TASK,
@@ -145,7 +185,7 @@ function js_cookie_blocking_js_alter(&$js) {
           // Attach the GA file to the OneTrust API.
           $gajs[$ga_file_path]['data'] = $ga_file_path;
           $gajs[$ga_file_path]['gdpr_onetrust']['group'] = JS_COOKIE_BLOCKING_PERFORMANCE;
-          $obj->generateOptanons($gajs[$ga_file_path]));
+          $obj->generateOptanons($gajs[$ga_file_path]);
         }
       }
     }

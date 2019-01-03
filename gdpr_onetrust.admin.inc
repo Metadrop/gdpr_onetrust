@@ -38,7 +38,7 @@ function gdpr_onetrust_compliance_admin_form_validate(&$form, &$form_state) {
     $value = $form_values[$form_field];
 
     if (gdpr_onetrust_compliance_isvalid_uuid($value) == FALSE) {
-      form_set_error($form_field, t('Please provide a Valid UUID for ') . $language_details->name);
+      form_set_error($form_field, t('Please provide a Valid UUID for:') . $language_details->name);
     }
 
   }
