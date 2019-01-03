@@ -99,8 +99,7 @@ function gdpr_onetrust_init() {
   else {
     $current_language_uuid = variable_get('gdpr_onetrust_compliance_uuid_' . $language->language);
   }
-  $path = $_GET['q'];
-  $abs_url = url($path, array('absolute' => TRUE));
+
   if (!empty($current_language_uuid) && (gdpr_onetrust_compliance_isvalid_uuid($current_language_uuid) == TRUE)) {
     gdpr_onetrust_get_domain($current_language_uuid);
   }

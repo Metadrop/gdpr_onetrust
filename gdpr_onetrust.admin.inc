@@ -50,9 +50,9 @@ function gdpr_onetrust_compliance_admin_form_validate(&$form, &$form_state) {
 function gdpr_onetrust_compliance_gnerate_fieldname($language_list_count, $language_key) {
 
   if ($language_list_count == 1 && !is_null(variable_get('gdpr_onetrust_compliance_uuid'))) {
-    return $form_field = 'gdpr_onetrust_compliance_uuid';
+    return 'gdpr_onetrust_compliance_uuid';
   }
   else {
-    return $form_field = 'gdpr_onetrust_compliance_uuid_' . $language_key;
+    return 'gdpr_onetrust_compliance_uuid_' . $language_key;
   }
 }
