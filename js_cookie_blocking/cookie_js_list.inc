@@ -8,7 +8,7 @@
 /**
  * Create an array to update the common JS files.
  */
-function cookie_js_path() {
+function js_cookie_blocking_cookie_js_list() {
 
   return $cookie_js_path = array(
     JS_COOKIE_BLOCKING_PERFORMANCE => array(),

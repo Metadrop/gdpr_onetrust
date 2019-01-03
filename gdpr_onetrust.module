@@ -15,6 +15,45 @@ define('GDPR_ONETRUST_LIVE_DOMAIN', '//cdn.cookielaw.org/consent/');
 define('GDPR_ONETRUST_STAGE_DOMAIN', 'https://optanon.blob.core.windows.net/consent/');
 
 /**
+ * Implements hook_help().
+ */
+function gdpr_onetrust_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#gdpr_onetrust':
+
+      $filepath = dirname(__FILE__) . '/README.md';
+      if (file_exists($filepath)) {
+        $readme = file_get_contents($filepath);
+      }
+      else {
+        $filepath = dirname(__FILE__) . '/README.txt';
+        if (file_exists($filepath)) {
+          $readme = file_get_contents($filepath);
+        }
+      }
+      if (!isset($readme)) {
+        return NULL;
+      }
+      if (module_exists('markdown')) {
+        $filters = module_invoke('markdown', 'filter_info');
+        $info = $filters['filter_markdown'];
+
+        if (function_exists($info['process callback'])) {
+          $output = $info['process callback']($readme, NULL);
+        }
+        else {
+          $output = '<pre>' . $readme . '</pre>';
+        }
+      }
+      else {
+        $output = '<pre>' . $readme . '</pre>';
+      }
+
+      return $output;
+  }
+}
+
+/**
  * Implements hook_menu().
  */
 function gdpr_onetrust_menu() {

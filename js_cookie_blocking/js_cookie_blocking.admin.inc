@@ -8,7 +8,7 @@
 /**
  * Implement configuration form.
  */
-function gdpr_onetrust_cookie_admin_form() {
+function js_cookie_blocking_admin_form() {
   $form['external_js_cookie'] = array(
     '#type' => 'textarea',
     '#title' => t('Javascripts URL with cookie category'),
