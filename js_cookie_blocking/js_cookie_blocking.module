@@ -10,7 +10,6 @@ define('JS_COOKIE_BLOCKING_FUNCTIONAL', '3');
 define('JS_COOKIE_BLOCKING_TARGETTING', '4');
 define('JS_COOKIE_BLOCKING_MEDIA', '8');
 
-
 /**
  * Implements hook_help().
  */
@@ -153,7 +152,6 @@ function js_cookie_blocking_gdpr_scopeing(&$js, $cookie_category) {
  * Implements hook_js_alter().
  */
 function js_cookie_blocking_js_alter(&$js) {
-  $flag = 0;
   $obj = GdprBlockjs::instance();
   if ($obj->isGdprScope() === TRUE) {
     js_cookie_blocking_filter_cookiejs($js, TRUE);
