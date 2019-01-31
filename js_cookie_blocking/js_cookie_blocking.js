@@ -55,7 +55,7 @@ var gdprDelete = function () {
   var prepareDeleteCookie = function (c_list) {
     c_list.forEach(function (c_names) {
       deleteCookie(c_names.Name);
-      if(jQuery.cookie(c_names.Name) !== null) {
+      if (jQuery.cookie(c_names.Name) !== null) {
         deleteCookie(c_names.Name, 'partdomain');
       }
     });
@@ -70,22 +70,22 @@ var gdprDelete = function () {
     var params = {};
     params['expires'] = 'Thu, 01-Jan-70 00:00:01 GMT';
     if (c_host === 'partdomain') {
-      //Will apply only when the dev/stage domains are set in cookie.
-      var part_domains = Drupal.settings.js_cookie_blocking.base_domain.split(".");
+      // Will apply only when the dev/stage domains are set in cookie.
+      var part_domains = Drupal.settings.js_cookie_blocking.base_domain.split('.');
       var last = part_domains.pop();
       var second_last = part_domains.pop();
-      part_domains.push(second_last+"."+last);
-      part_domains.push("."+second_last+"."+last);
+      part_domains.push(second_last + '.' + last);
+      part_domains.push('.' + second_last + '.' + last);
       part_domains.push(Drupal.settings.js_cookie_blocking.base_domain);
-      part_domains.push("."+Drupal.settings.js_cookie_blocking.base_domain);
+      part_domains.push('.' + Drupal.settings.js_cookie_blocking.base_domain);
       part_domains.reverse();
       part_domains.forEach(function (part_domain) {
-        var path = "/";
+        var path = '/';
         document.cookie = c_name + '=' +
           ((path) ? '; path=' + path : '') +
           ((part_domain) ? '; domain=' + part_domain : '') +
-          '; expires='+params.expires;
-        if(jQuery.cookie(c_name) === null) {
+          '; expires=' + params.expires;
+        if (jQuery.cookie(c_name) === null) {
           return true;
         }
       });
@@ -96,7 +96,7 @@ var gdprDelete = function () {
   };
 
   return {
-    assignCookie : function () {
+    assignCookie: function () {
       var cookies_to_block = {performance_cookie: [], functional_cookie: [], targeting_cookie: [], media_cookie: []};
       var cookie_category = [2, 3, 4, 8];
 
@@ -106,16 +106,17 @@ var gdprDelete = function () {
         var domaindata = Optanon.GetDomainData();
         var domaindata_length = domaindata.Groups.length;
         var parrent_groupid = [];
-        var i, j;
+        var i;
+        var j;
 
-        //Fetch the parent category ID and cookies
+        // Fetch the parent category ID and cookies
         for (i = 1; i < domaindata_length; i++) {
           if (jQuery.inArray(domaindata.Groups[i].OptanonGroupId, disabled_cookie_category) !== -1) {
             getDisabledCookies(domaindata.Groups[i].Cookies, domaindata.Groups[i].OptanonGroupId, cookies_to_block);
             parrent_groupid.push([domaindata.Groups[i].OptanonGroupId, domaindata.Groups[i].GroupId]);
           }
         }
-        //Fetch the sub category cookies belonging to parent categories.
+        // Fetch the sub category cookies belonging to parent categories.
         for (j = 1; j < domaindata_length; j++) {
           if (domaindata.Groups[j].Parent !== null && domaindata.Groups[j].Parent) {
             parrent_groupid.forEach(function (p_group) {
@@ -127,9 +128,9 @@ var gdprDelete = function () {
         }
       }
 
-      jQuery.post("/gdpr/cookie_blocking", {
-        "gdpr_c": OptanonActiveGroups,
-        "cookie_toblock": JSON.stringify(cookies_to_block)
+      jQuery.post('/gdpr/cookie_blocking', {
+        'gdpr_c': OptanonActiveGroups,
+        'cookie_toblock': JSON.stringify(cookies_to_block)
       });
     }
   };

@@ -40,10 +40,10 @@ CONFIGURATION
 
  * We used the OneTrust Helper functions to block the cookies from
    clientside(Optanon.InsertHtml and Optanon.InsertScript).
- * To Block Js files from Site code - Create an object for the GdprBlockjs
+ * To Block Js files from Site code - Create an object for the JsCookieBlocking
    Class and call the optanonInsertscript() with proper arguments.
  	Eg:
- 		$gdpr = GdprBlockjs::Instance();
+ 		$gdpr = JsCookieBlocking::Instance();
  		  /*
 		   * Function create Optanon.InsertScript
 		   * $js_path => The javascript file path
@@ -60,9 +60,9 @@ CONFIGURATION
  		optanonInserthtml($element, $selector, $groupid, $addjs = FALSE);
 
 
- * To Block HTML Code - Create an object for the GdprBlockjs Class and call
+ * To Block HTML Code - Create an object for the JsCookieBlocking Class and call
    the optanonInserthtml() with proper arguments.
- 		$gdpr = GdprBlockjs::Instance();
+ 		$gdpr = JsCookieBlocking::Instance();
  		  /*
 		   * Function create Optanon.InsertHtml
 		   * $element => The HTML to be placed rendered through

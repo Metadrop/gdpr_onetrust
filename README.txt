@@ -46,8 +46,8 @@ CONFIGURATION
 from OneTrust.
 
 Recommendation:
-Assing the UUID in settings.php, change the variable based on language if applicable.
-$conf['gdpr_onetrust_compliance_uuid'] = '<UUID value>';
+Assing the UUID in settings.php, change the variable based on language if
+applicable. $conf['gdpr_onetrust_compliance_uuid'] = '<UUID value>';
 
 
 2. You may want to create a cookie policy page that would explain how your site

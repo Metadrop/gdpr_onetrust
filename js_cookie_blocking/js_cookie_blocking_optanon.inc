@@ -1,9 +1,9 @@
 <?php
 
 /**
- * GdprBlockjs implements the onetrust API helpers to block cookies.
+ * JsCookieBlocking implements the onetrust API helpers to block cookies.
  */
-class GdprBlockjs {
+class JsCookieBlocking {
 
   private $optanonjs;
   private $insertscript;
@@ -22,7 +22,7 @@ class GdprBlockjs {
   public static function instance() {
     static $inst = NULL;
     if ($inst === NULL) {
-      $inst = new GdprBlockjs();
+      $inst = new JsCookieBlocking();
     }
     return $inst;
   }

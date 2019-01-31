@@ -99,7 +99,7 @@ function js_cookie_blocking_cookiecategory_check($cookie_name) {
  * Implements hook_init().
  */
 function js_cookie_blocking_init() {
-  $obj = GdprBlockjs::instance();
+  $obj = JsCookieBlocking::instance();
   if ($obj->isGdprScope() === TRUE) {
     global $base_root;
     drupal_add_js(drupal_get_path('module', 'js_cookie_blocking') . '/js_cookie_blocking.js', 'file');
@@ -116,8 +116,8 @@ function js_cookie_blocking_init() {
  */
 function js_cookie_blocking_filter_cookiejs(&$site_js, $exclude_add = FALSE) {
   module_load_include('inc', 'js_cookie_blocking', 'cookie_js_list');
-  $cookie_js_list = cookie_js_path();
-  $obj = GdprBlockjs::instance();
+  $cookie_js_list = js_cookie_blocking_cookie_js_list();
+  $obj = JsCookieBlocking::instance();
   foreach ($cookie_js_list as $cookie_js_key => $cookie_js_array) {
     foreach ($cookie_js_array as $cookie_js) {
       if (isset($site_js[$cookie_js])) {
@@ -135,7 +135,7 @@ function js_cookie_blocking_filter_cookiejs(&$site_js, $exclude_add = FALSE) {
  * Implements hook_html_head_alter().
  */
 function js_cookie_blocking_html_head_alter(&$head_elements) {
-  $obj = GdprBlockjs::instance();
+  $obj = JsCookieBlocking::instance();
   $obj->optanoPublishScript();
 }
 
@@ -152,10 +152,10 @@ function js_cookie_blocking_gdpr_scopeing(&$js, $cookie_category) {
  * Implements hook_js_alter().
  */
 function js_cookie_blocking_js_alter(&$js) {
-  $obj = GdprBlockjs::instance();
+  $obj = JsCookieBlocking::instance();
   if ($obj->isGdprScope() === TRUE) {
     js_cookie_blocking_filter_cookiejs($js, TRUE);
-    $blocking_js_files = variable_get('external_js_cookie', '');
+    $blocking_js_files = variable_get('js_cookie_blocking_external_js_cookie', '');
     if ($blocking_js_files != '') {
       $block_js_array = explode(PHP_EOL, $blocking_js_files);
       foreach ($block_js_array as $value) {
@@ -211,13 +211,14 @@ function js_cookie_blocking_create_gajs($filepath, $data) {
 function js_cookie_blocking_block_iframe(&$content) {
   $marker_list = array('youtube');
   if (preg_match_all('#(?ism:<iframe[^>]*)src=(".*?")(?ism:(?:.*<\/iframe>))#', $content, $matches) !== FALSE) {
+    $gdpr = JsCookieBlocking::instance();
     foreach ($marker_list as $marker) {
       foreach ($matches[0] as $key => $iframes) {
         if (strstr($iframes, $marker) !== FALSE) {
           $media_id = 'media_id_' . rand();
           $content = str_replace($iframes, '<div id="' . $media_id . '"></div>', $content);
           $iframes = str_replace(array("\n", "\r"), '', $iframes);
-          $gdpr->optanonInserthtml($iframes, $media_id, JS_COOKIE_BLOCKING_MEDIA);
+          $gdpr->optanonInserthtml($iframes, $media_id, JS_COOKIE_BLOCKING_TARGETTING);
         }
       }
     }

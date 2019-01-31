@@ -1,6 +1,6 @@
 name = GDPR - Block cookies from Javascript
 description = Block the external cookies load from Javascripts
-package = GDPR
+package = GDPR OneTrust
 core = 7.x
 dependencies[] = "gdpr_onetrust"
 configure = admin/config/system/gdpr-cookies
