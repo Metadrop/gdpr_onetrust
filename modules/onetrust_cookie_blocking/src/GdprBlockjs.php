@@ -33,7 +33,7 @@ class GdprBlockjs {
    * Verify the JS file and insert to the insertscript API.
    */
   public function generateOptanons($thjs) {
-    if(is_array($thjs)) {
+    if (is_array($thjs)) {
       foreach ($thjs as $js_key => $js_paths) {
         if ($this->isExistJs($js_paths['data']) === TRUE) {
           $this->optanonjs[] = $js_paths;
@@ -44,27 +44,32 @@ class GdprBlockjs {
   }
 
   /**
-   * Function create Optanon.InsertScript
+   * Function create Optanon.InsertScript.
+   *
    * @param string $js_path
-   *  The javascript file path
+   *   The javascript file path.
    * @param int $js_group
-   *  The OneTrust Cookie Category values
-   *  ONETRUST_COOKIE_BLOCKING_PERFORMANCE / ONETRUST_COOKIE_BLOCKING_FUNCTIONAL
-   *  / ONETRUST_COOKIE_BLOCKING_TARGETTING
-   * @param $position
-   *  postion of the js script "head"
+   *   The OneTrust Cookie Category values.
+   *   ONETRUST_COOKIE_BLOCKING_PERFORMANCE /
+   *   ONETRUST_COOKIE_BLOCKING_FUNCTIONAL
+   *   / ONETRUST_COOKIE_BLOCKING_TARGETTING.
+   * @param string $position
+   *   Postion of the js script "head".
    * @param array $additional
-   *  Array consisting of 3rd and 4th parameter of Optanon.InsertHTML()
-   *  Optional
-   *  $additional[0] = 'SomeCallbackFunction'
-   *  $additional[1] = '{deleteSelectorContent: false, makeSelectorVisible: true, makeElementsVisible: \'HtmlElementIdToShowOnConsent1\',
-   *   \'HtmlElementIdToShowOnConsent2\', deleteElements: \'HtmlElementIdToDeleteOnConsent\']}'
+   *   Array consisting of 3rd and 4th parameter of Optanon.InsertHTML().
+   *   Optional
+   *   $additional[0] = 'SomeCallbackFunction'
+   *   $additional[1] = '{deleteSelectorContent: false,
+   *   makeSelectorVisible: true,
+   *   makeElementsVisible: \'HtmlElementIdToShowOnConsent1\',
+   *   \'HtmlElementIdToShowOnConsent2\',
+   *   deleteElements: \'HtmlElementIdToDeleteOnConsent\']}'.
    */
-  public function optanonInsertscript($js_path, $js_group, $position = "head", $additional = array()) {
+  public function optanonInsertscript($js_path, $js_group, $position = "head", $additional = []) {
     global $base_root;
 
-    $additional_0 = (isset($additional[0]))?'|'.$additional[0]:'';
-    $additional_1 = (isset($additional[1]))?'|'.$additional[1]:'';
+    $additional_0 = (isset($additional[0])) ? '|' . $additional[0] : '';
+    $additional_1 = (isset($additional[1])) ? '|' . $additional[1] : '';
     $parsed_url_data = parse_url($js_path);
     if (!isset($parsed_url_data['scheme']) && !isset($parsed_url_data['host'])) {
       $js_path = $base_root . '/' . $js_path;
@@ -88,25 +93,28 @@ class GdprBlockjs {
   }
 
   /**
-   * Function create Optanon.InsertHtml
-   * @param $element
-   *  The HTML to be placed rendered through Optanon.InsertHtml(),
-   *  that fires a third party cookie.
+   * Function create Optanon.InsertHtml.
+   *
+   * @param string $element
+   *   The HTML to be placed rendered through Optanon.InsertHtml(),
+   *   that fires a third party cookie.
    * @param string $selector
-   *  The wrapper div id.
-   * @param INT $groupid
-   *  The OneTrust Cookie Category values
-   *  ONETRUST_COOKIE_BLOCKING_PERFORMANCE/ONETRUST_COOKIE_BLOCKING_FUNCTIONAL/ONETRUST_COOKIE_BLOCKING_TARGETTING
+   *   The wrapper div id.
+   * @param int $groupid
+   *   The OneTrust Cookie Category values
+   *   ONETRUST_COOKIE_BLOCKING_PERFORMANCE
+   *   /ONETRUST_COOKIE_BLOCKING_FUNCTIONAL
+   *   /ONETRUST_COOKIE_BLOCKING_TARGETTING.
    * @param array $additional
-   *  Array consisting of 3rd and 4th parameter of Optanon.InsertHTML()
-   *  Optional
-   * $additional[0] / $additional[1]
+   *   Array consisting of 3rd and 4th parameter of Optanon.InsertHTML().
+   *   Optional
+   *   $additional[0] / $additional[1].
    */
-  public function optanonInserthtml($element, $selector,  $groupid, $additional = array()) {
+  public function optanonInserthtml($element, $selector, $groupid, $additional = array()) {
 
-    $additional[0] = ($additional[0] != "")?$additional[0]:'';
-    $additional[1] = ($additional[1] != "")?$additional[1]:'';
-    $addhtml =  $element .  ', ' . $selector . ', '.$additional[0].', '.$additional[1].', ' . $groupid . '|';
+    $additional[0] = ($additional[0] != "") ? $additional[0] : '';
+    $additional[1] = ($additional[1] != "") ? $additional[1] : '';
+    $addhtml = $element . ', ' . $selector . ', ' . $additional[0] . ', ' . $additional[1] . ', ' . $groupid . '|';
     $this->inserthtml .= $addhtml;
   }
 

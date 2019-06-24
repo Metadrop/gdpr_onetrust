@@ -6,6 +6,9 @@
  */
 
 use Drupal\onetrust_cookie_blocking\GdprBlockjs;
+use Drupal\Core\Asset\AttachedAssetsInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
 define('ONETRUST_COOKIE_BLOCKING_PERFORMANCE', 2);
 define('ONETRUST_COOKIE_BLOCKING_FUNCTIONAL', 3);
@@ -32,10 +35,9 @@ function onetrust_cookie_blocking_get_js_path() {
 /**
  * Implements hook_js_alter().
  */
-function onetrust_cookie_blocking_js_alter(&$js, \Drupal\Core\Asset\AttachedAssetsInterface $assets) {
+function onetrust_cookie_blocking_js_alter(&$js, AttachedAssetsInterface $assets) {
   $gdpr = GdprBlockjs::instance();
   if ($gdpr->isGdprScope() === TRUE) {
-    //onetrust_cookie_blocking_filter_cookiejs($js, TRUE);
     $blocking_js_files = onetrust_cookie_blocking_get_js_path();
     if ($blocking_js_files != '') {
       $block_js_array = explode(PHP_EOL, $blocking_js_files);
@@ -117,15 +119,15 @@ function onetrust_cookie_blocking_page_attachments_alter(array &$attachments) {
 
       }
     }
-    if(is_array($gajs)){
+    if (is_array($gajs)) {
       $gdpr->generateOptanons($gajs);
     }
+
     $attachments['#attached']['library'][] = 'onetrust_cookie_blocking/cookie-blocking';
     $attachments['#attached']['drupalSettings']['onetrust_cookie_blocking']['insertscript'] = $gdpr->optanoPublishScript();
     $attachments['#attached']['drupalSettings']['onetrust_cookie_blocking']['inserthtml'] = $gdpr->optanoPublishHtml();
   }
 }
-
 
 /**
  * Verify the file permissions and create/update the file.
@@ -143,23 +145,25 @@ function onetrust_cookie_blocking_create_gajs($filepath, $data) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_view to pass iframes to Optanon.InsertHTML
+ * Implements hook_ENTITY_TYPE_view() to pass iframes to Optanon.InsertHTML().
  */
-function onetrust_cookie_blocking_node_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+function onetrust_cookie_blocking_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
 
-  if(isset($build['body'][0]['#text'])) {
+  if (isset($build['body'][0]['#text'])) {
     $build['body'][0]['#text'] = onetrust_cookie_blocking_iframes($build['body'][0]['#text']);
   }
+
 }
 
 /**
  * Implements iframe remidiation on page load.
  * The iframes triggering cookies needs to be wrapped in a div with id,
- * This id and the iframe will be passed to optanon.Inserthtml() Onetrust function to control based on user consent.
+ * This id and the iframe will be passed to optanon.Inserthtml().
+ * Onetrust function to control based on user consent.
  */
 function onetrust_cookie_blocking_iframes($content) {
   $gdpr = GdprBlockjs::instance();
-  $marker_list = array('youtube', 'socialpollencount');
+  $marker_list = [['youtube', 'socialpollencount']];
   if (preg_match_all('#<iframe\s+.*?\s+src=(".*?").*?<\/iframe>#', $content, $matches) !== FALSE) {
     foreach ($marker_list as $marker) {
       foreach ($matches[0] as $key => $iframes) {

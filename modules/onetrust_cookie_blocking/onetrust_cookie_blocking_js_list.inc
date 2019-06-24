@@ -10,7 +10,7 @@
  */
 function cookie_js_path() {
 
-  return $cookie_js_path = array(
+  return array(
     ONETRUST_COOKIE_BLOCKING_PERFORMANCE => array(),
     ONETRUST_COOKIE_BLOCKING_FUNCTIONAL => array(),
     ONETRUST_COOKIE_BLOCKING_TARGETTING => array(),
