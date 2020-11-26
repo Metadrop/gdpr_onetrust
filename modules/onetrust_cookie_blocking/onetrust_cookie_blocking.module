@@ -92,11 +92,11 @@ function onetrust_cookie_blocking_page_attachments_alter(array &$attachments) {
         if (is_array($htmlhead) && isset($htmlhead[0]['#value']) && preg_match("/GoogleAnalyticsObject/", $htmlhead[0]['#value'], $matches)) {
           preg_match("/^\(function.*/", $htmlhead[0]['#value'], $ga_match);
           $ga_js = '/ga.js';
-          $ga_file_path = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . $ga_js;
+          $ga_file_path = \Drupal::service('file_system')->realpath(\Drupal::config('system.file')->get('default_scheme') . "://") . $ga_js;
 
           $filepath = $ga_file_path;
           onetrust_cookie_blocking_create_gajs($filepath, $ga_match[0]);
-          $base_wrapper = \Drupal::service('stream_wrapper_manager')->getViaScheme(file_default_scheme());
+          $base_wrapper = \Drupal::service('stream_wrapper_manager')->getViaScheme(\Drupal::config('system.file')->get('default_scheme'));
           $ga_js_path = $base_wrapper::baseUrl() . $ga_js;
 
           // Attach the GA file to the OneTrust API.

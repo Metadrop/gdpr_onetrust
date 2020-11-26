@@ -50,7 +50,7 @@ class GDPROneTrustCookieBlocking extends FormBase {
       ->set('external_js_cookie', $form_state->getValue('external_js_cookie'))
       ->set('ga_performance_cookies', $form_state->getValue('ga_performance_cookies'))
       ->save();
-    drupal_set_message('GDPR Onetrust Configuration has been saved.');
+    $this->messenger()->addStatus('GDPR Onetrust Configuration has been saved.');
   }
 
 }

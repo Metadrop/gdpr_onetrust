@@ -3,8 +3,14 @@ description: GDPR One Trust Implementation for EU sites.
 package: GDPR Onetrust
 
 type: module
-core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - drupal:menu_link_content
 
 configure: gdpr_onetrust.settings
+
+# Information added by Drupal.org packaging script on 2019-06-25
+version: '8.x-1.0'
+core: '8.x'
+project: 'gdpr_onetrust'
+datestamp: 1561465388

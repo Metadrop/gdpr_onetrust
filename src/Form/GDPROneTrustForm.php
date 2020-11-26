@@ -99,7 +99,7 @@ class GDPROneTrustForm extends FormBase {
         ->set($field_name, $form_value)
         ->save();
     }
-    drupal_set_message('GDPR Onetrust Configuration has been saved.');
+    $this->messenger()->addStatus('GDPR Onetrust Configuration has been saved.');
   }
 
 }

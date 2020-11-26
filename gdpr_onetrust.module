@@ -42,7 +42,7 @@ function gdpr_onetrust_page_attachments(array &$attachments) {
         '#type' => 'html_tag',
         '#tag' => 'script',
         '#value' => '',
-        '#attributes' => ['src' => $cdn_url],
+        '#attributes' => ['src' => $cdn_url, 'defer' => TRUE],
       ],
       'onetrust_inline_cdn',
     ];
